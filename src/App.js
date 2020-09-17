@@ -1,26 +1,40 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import api from './api';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component{
+  state={
+    filmes:[],
+  }
+  async componentDidMount(){
+    const response = await api.get('star%20wars');
+    //console.log(response.data);
+    this.setState({
+      filmes : response.data
+    })
+  }
+  render(){
+   const {filmes} = this.state;
+    return(
+      <div>
+        <h1>Listando os Filmes</h1>
+        <div className="container">
+        {console.log(filmes)}
+        {filmes.map(filme => (
+          <div className="filme" key={filme.show.id}>
+            <h2><strong>Filme: </strong> {filme.show.name}</h2>
+            <div className="img">
+              <img src={filme.show.image.medium} />
+            </div>
+            <div className="link">
+              <a href={filme.show.url}>Acessar >></a>
+            </div>
+          </div>
+        ))}
+        </div>
+        <div className="clear"></div>
+      </div>
+    )
+  }
 }
 
 export default App;
